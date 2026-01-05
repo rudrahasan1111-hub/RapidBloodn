@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recipient Dashboard - RapidBlood</title>
+  <link rel="stylesheet" href="css/recipient-dashboard.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <span class="logo"><i class="fas fa-heartbeat"></i> RapidBlood</span>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="donor-registration.html">Donor Registration</a></li>
+        <li><a href="recipient-registration.html">Recipient Registration</a></li>
+        <li class="language-switcher">
+          <select id="languageSelect" onchange="changeLanguage(this.value)">
+            <option value="en">🇺🇸 English</option>
+            <option value="bn">🇧🇩 বাংলা</option>
+          </select>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <div class="welcome-section">
+          <div class="user-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="user-info">
+            <h2>Welcome, <span id="recipientName">Recipient</span></h2>
+            <p>Find the blood donors you need quickly</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-content">
+        <div class="profile-section">
+          <h3><i class="fas fa-user"></i> <span data-i18n="profileInformation">Profile Information</span></h3>
+          <div class="profile-grid">
+            <div class="profile-item">
+              <i class="fas fa-envelope"></i>
+              <div>
+                <label data-i18n="email">Email:</label>
+                <span id="recipientEmail"></span>
+              </div>
+            </div>
+            <div class="profile-item">
+              <i class="fas fa-phone"></i>
+              <div>
+                <label data-i18n="phone">Phone:</label>
+                <span id="recipientPhone"></span>
+              </div>
+            </div>
+            <div class="profile-item">
+              <i class="fas fa-tint"></i>
+              <div>
+                <label data-i18n="bloodGroupNeeded">Blood Group Needed:</label>
+                <span id="recipientBlood"></span>
+              </div>
+            </div>
+            <div class="profile-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <label data-i18n="location">Location:</label>
+                <span id="recipientLocation"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emergency Blood Request Section -->
+        <div class="emergency-section">
+          <h3><i class="fas fa-exclamation-triangle"></i> <span data-i18n="emergencyBloodRequest">Emergency Blood Request</span></h3>
+          <div class="emergency-form">
+            <div class="urgency-levels">
+              <label data-i18n="urgencyLevel">Urgency Level:</label>
+              <div class="urgency-buttons">
+                <button type="button" class="urgency-btn critical active" data-level="critical">
+                  <i class="fas fa-exclamation-triangle"></i> <span data-i18n="critical">Critical</span>
+                </button>
+                <button type="button" class="urgency-btn high" data-level="high">
+                  <i class="fas fa-exclamation-circle"></i> <span data-i18n="high">High</span>
+                </button>
+                <button type="button" class="urgency-btn medium" data-level="medium">
+                  <i class="fas fa-info-circle"></i> <span data-i18n="medium">Medium</span>
+                </button>
+                <button type="button" class="urgency-btn low" data-level="low">
+                  <i class="fas fa-info"></i> <span data-i18n="low">Low</span>
+                </button>
+              </div>
+            </div>
+            <div class="emergency-details">
+              <div class="form-group">
+                <label for="bloodUnits" data-i18n="bloodUnitsNeeded">Blood Units Needed:</label>
+                <input type="number" id="bloodUnits" min="1" max="10" value="1" required>
+              </div>
+              <div class="form-group">
+                <label for="deadline" data-i18n="deadline">Deadline:</label>
+                <input type="datetime-local" id="deadline" required>
+              </div>
+              <div class="form-group">
+                <label for="hospital" data-i18n="hospital">Hospital:</label>
+                <input type="text" id="hospital" placeholder="Hospital name" required>
+              </div>
+              <div class="form-group">
+                <label for="emergencyDescription" data-i18n="description">Description:</label>
+                <textarea id="emergencyDescription" rows="3" placeholder="Describe the emergency situation..." required></textarea>
+              </div>
+              <button type="submit" class="emergency-submit-btn">
+                <i class="fas fa-paper-plane"></i> <span data-i18n="sendEmergencyRequest">Send Emergency Request</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Donor Reporting Section -->
+        <div class="reporting-section">
+          <h3><i class="fas fa-flag"></i> <span data-i18n="donorReporting">Donor Reporting</span></h3>
+          <p>Report any issues with donors you've interacted with to help maintain platform safety.</p>
+          
+          <div class="report-actions">
+            <button class="report-btn primary" onclick="openReportModal()">
+              <i class="fas fa-flag"></i> Report a Donor
+            </button>
+            <button class="report-btn secondary" onclick="viewReportHistory()">
+              <i class="fas fa-history"></i> View Report History
+            </button>
+          </div>
+
+          <!-- Report History Table -->
+          <div class="report-history" id="reportHistory" style="display: none;">
+            <h4><i class="fas fa-list"></i> Your Reports</h4>
+            <div class="table-container">
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th>Donor</th>
+                    <th>Category</th>
+                    <th>Severity</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="reportHistoryBody">
+                  <!-- Report history will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Report Modal -->
+        <div id="reportModal" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3><i class="fas fa-flag"></i> Report a Donor</h3>
+              <span class="close" onclick="closeReportModal()">&times;</span>
+            </div>
+            <form id="reportForm" class="report-form">
+              <div class="form-group">
+                <label for="reportedDonor">Select Donor to Report:</label>
+                <select id="reportedDonor" required>
+                  <option value="">Choose a donor...</option>
+                  <!-- Donor options will be populated dynamically -->
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="reportCategory">Report Category:</label>
+                <select id="reportCategory" required>
+                  <option value="">Select category...</option>
+                  <option value="fake_donor">Fake Donor</option>
+                  <option value="inappropriate_behavior">Inappropriate Behavior</option>
+                  <option value="no_show">No Show</option>
+                  <option value="harassment">Harassment</option>
+                  <option value="fraud">Fraud/Scam</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="severityLevel">Severity Level:</label>
+                <div class="severity-buttons">
+                  <button type="button" class="severity-btn low" data-severity="low">
+                    <i class="fas fa-info-circle"></i> Low
+                  </button>
+                  <button type="button" class="severity-btn medium" data-severity="medium">
+                    <i class="fas fa-exclamation-circle"></i> Medium
+                  </button>
+                  <button type="button" class="severity-btn high" data-severity="high">
+                    <i class="fas fa-exclamation-triangle"></i> High
+                  </button>
+                  <button type="button" class="severity-btn critical" data-severity="critical">
+                    <i class="fas fa-radiation"></i> Critical
+                  </button>
+                </div>
+                <input type="hidden" id="severityLevel" value="low" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="reportDescription">Detailed Description:</label>
+                <textarea id="reportDescription" rows="4" placeholder="Please provide a detailed description of the incident..." required></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label for="evidenceUpload">Evidence (Optional):</label>
+                <input type="file" id="evidenceUpload" accept="image/*,.pdf,.doc,.docx" multiple>
+                <small>Upload screenshots, images, or documents (Max 5 files, 10MB each)</small>
+              </div>
+              
+              <div class="form-group">
+                <label for="incidentDate">Incident Date:</label>
+                <input type="datetime-local" id="incidentDate" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="contactPreference">Contact Preference:</label>
+                <select id="contactPreference">
+                  <option value="anonymous">Anonymous Report</option>
+                  <option value="identified">Identified Report</option>
+                </select>
+              </div>
+              
+              <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="closeReportModal()">Cancel</button>
+                <button type="submit" class="btn-primary">
+                  <i class="fas fa-paper-plane"></i> Submit Report
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="search-section">
+          <h3><i class="fas fa-search"></i> <span data-i18n="searchAvailableDonors">Search Available Donors</span></h3>
+          <div class="search-controls">
+            <div class="search-input-group">
+              <i class="fas fa-map-marker-alt"></i>
+              <input type="text" id="searchLocation" placeholder="Enter location (e.g. Dhaka)" />
+            </div>
+            <button onclick="searchDonors()" class="search-btn">
+              <i class="fas fa-search"></i> <span data-i18n="searchDonors">Search Donors</span>
+            </button>
+          </div>
+          <p class="search-note" data-i18n="searchNote">Find donors in your area who match your blood type requirements</p>
+        </div>
+
+        <div class="search-results" id="searchResults">
+          <h4 data-i18n="searchResults">Search Results</h4>
+          <div id="donorsList" class="donors-list">
+            <div class="no-donors" id="noDonorsMessage">
+              <i class="fas fa-search"></i>
+              <p data-i18n="noDonorsFound">No compatible donors found in this location</p>
+              <span data-i18n="noDonorsNote">Try searching for a different location or check back later</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-section">
+          <h3><i class="fas fa-comments"></i> <span data-i18n="chatWithDonors">Chat with Donors</span></h3>
+          <div class="chat-container">
+            <div class="chat-users">
+              <h4 data-i18n="availableDonors">Available Donors</h4>
+              <div id="chatUsersList" class="users-list">
+                <div class="no-users">
+                  <i class="fas fa-users"></i>
+                  <p data-i18n="noUsersForChat">No users available for chat</p>
+                </div>
+              </div>
+            </div>
+            <div class="chat-messages">
+              <div class="chat-header">
+                <h4 data-i18n="selectDonorToChat">Select a donor to start chatting</h4>
+              </div>
+              <div class="messages-container" id="messagesContainer">
+                <div class="no-chat-selected">
+                  <i class="fas fa-comment-dots"></i>
+                  <p data-i18n="selectDonorToChat">Select a donor to start chatting</p>
+                </div>
+              </div>
+              <div class="message-input">
+                <input type="text" id="messageInput" data-i18n-placeholder="typeMessage" placeholder="Type your message..." />
+                <button onclick="sendMessage()" class="send-btn">
+                  <i class="fas fa-paper-plane"></i> <span data-i18n="send">Send</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-actions">
+          <button onclick="logout()" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/languages.js"></script>
+  <script src="js/global-language.js"></script>
+  <script>
+    // Language switcher function
+    function changeLanguage(lang) {
+      if (LanguageManager.changeLanguage(lang)) {
+        // Update language selector
+        document.getElementById('languageSelect').value = lang;
+        
+        // Show success message
+        showLanguageNotification(lang);
+      }
+    }
+    
+    // Show language change notification
+    function showLanguageNotification(lang) {
+      const langNames = { en: 'English', bn: 'বাংলা' };
+      const message = lang === 'bn' ? 
+        `ভাষা পরিবর্তন হয়েছে: ${langNames[lang]}` : 
+        `Language changed to: ${langNames[lang]}`;
+      
+      // Create notification
+      const notification = document.createElement('div');
+      notification.className = 'language-notification';
+      notification.innerHTML = `
+        <div class="notification-content">
+          <i class="fas fa-globe"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => notification.classList.add('show'), 100);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (document.body.contains(notification)) {
+            document.body.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+    
+    // Initialize language system
+    document.addEventListener('DOMContentLoaded', function() {
+      LanguageManager.init();
+      
+      // Set current language in selector
+      const currentLang = LanguageManager.getCurrentLanguage();
+      document.getElementById('languageSelect').value = currentLang;
+      
+      // Debug: Log current language
+      console.log('Current language:', currentLang);
+      console.log('Available languages:', LanguageManager.getAvailableLanguages());
+      
+      // Test translation
+      console.log('Test translation:', LanguageManager.t('home'));
+    });
+    
+    // Debug function to test language switching
+    function testLanguageSwitch() {
+      const currentLang = LanguageManager.getCurrentLanguage();
+      const newLang = currentLang === 'en' ? 'bn' : 'en';
+      console.log(`Switching from ${currentLang} to ${newLang}`);
+      changeLanguage(newLang);
+    }
+
+    // Donor Reporting System Functions
+    let reports = [];
+    let donors = [];
+
+    // Initialize reporting system
+    function initReportingSystem() {
+      loadMockDonors();
+      loadMockReports();
+      setupSeverityButtons();
+      setupReportForm();
+    }
+
+    // Load mock donors for demonstration
+    function loadMockDonors() {
+      donors = [
+        { id: 1, name: "John Smith", bloodType: "O+", location: "Dhaka" },
+        { id: 2, name: "Sarah Johnson", bloodType: "A-", location: "Chittagong" },
+        { id: 3, name: "Mike Wilson", bloodType: "B+", location: "Sylhet" },
+        { id: 4, name: "Emily Brown", bloodType: "AB+", location: "Rajshahi" }
+      ];
+      
+      populateDonorSelect();
+    }
+
+    // Load mock reports for demonstration
+    function loadMockReports() {
+      reports = [
+        {
+          id: 1,
+          donorName: "John Smith",
+          category: "no_show",
+          severity: "medium",
+          status: "resolved",
+          date: "2024-01-15",
+          description: "Donor did not show up for scheduled donation"
+        },
+        {
+          id: 2,
+          donorName: "Sarah Johnson",
+          category: "inappropriate_behavior",
+          severity: "high",
+          status: "in-review",
+          date: "2024-01-20",
+          description: "Inappropriate messages during chat"
+        }
+      ];
+    }
+
+    // Populate donor select dropdown
+    function populateDonorSelect() {
+      const select = document.getElementById('reportedDonor');
+      select.innerHTML = '<option value="">Choose a donor...</option>';
+      
+      donors.forEach(donor => {
+        const option = document.createElement('option');
+        option.value = donor.id;
+        option.textContent = `${donor.name} (${donor.bloodType}) - ${donor.location}`;
+        select.appendChild(option);
+      });
+    }
+
+    // Setup severity button functionality
+    function setupSeverityButtons() {
+      const severityBtns = document.querySelectorAll('.severity-btn');
+      severityBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Remove active class from all buttons
+          severityBtns.forEach(b => b.classList.remove('active'));
+          // Add active class to clicked button
+          this.classList.add('active');
+          // Update hidden input
+          document.getElementById('severityLevel').value = this.dataset.severity;
+        });
+      });
+    }
+
+    // Setup report form submission
+    function setupReportForm() {
+      const form = document.getElementById('reportForm');
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitReport();
+      });
+    }
+
+    // Open report modal
+    function openReportModal() {
+      document.getElementById('reportModal').style.display = 'block';
+      // Set default incident date to current date/time
+      const now = new Date();
+      const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      document.getElementById('incidentDate').value = localDateTime;
+    }
+
+    // Close report modal
+    function closeReportModal() {
+      document.getElementById('reportModal').style.display = 'none';
+      document.getElementById('reportForm').reset();
+      // Reset severity buttons
+      document.querySelectorAll('.severity-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector('.severity-btn.low').classList.add('active');
+      document.getElementById('severityLevel').value = 'low';
+    }
+
+    // Submit report
+    function submitReport() {
+      const formData = new FormData(document.getElementById('reportForm'));
+      const reportData = {
+        id: Date.now(),
+        donorId: formData.get('reportedDonor'),
+        donorName: donors.find(d => d.id == formData.get('reportedDonor'))?.name || 'Unknown',
+        category: formData.get('reportCategory'),
+        severity: formData.get('severityLevel'),
+        description: formData.get('reportDescription'),
+        incidentDate: formData.get('incidentDate'),
+        contactPreference: formData.get('contactPreference'),
+        status: 'new',
+        date: new Date().toISOString().split('T')[0],
+        evidence: formData.get('evidenceUpload') ? 'Yes' : 'No'
+      };
+
+      // Add to reports array
+      reports.unshift(reportData);
+      
+      // Show success message
+      showNotification('Report submitted successfully!', 'success');
+      
+      // Close modal
+      closeReportModal();
+      
+      // Refresh report history if visible
+      if (document.getElementById('reportHistory').style.display !== 'none') {
+        displayReportHistory();
+      }
+    }
+
+    // View report history
+    function viewReportHistory() {
+      const historyDiv = document.getElementById('reportHistory');
+      if (historyDiv.style.display === 'none') {
+        historyDiv.style.display = 'block';
+        displayReportHistory();
+      } else {
+        historyDiv.style.display = 'none';
+      }
+    }
+
+    // Display report history
+    function displayReportHistory() {
+      const tbody = document.getElementById('reportHistoryBody');
+      tbody.innerHTML = '';
+      
+      if (reports.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; color: #6c757d;">
+              <i class="fas fa-inbox"></i> No reports submitted yet
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      reports.forEach(report => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${report.donorName}</td>
+          <td>${getCategoryLabel(report.category)}</td>
+          <td><span class="severity-badge ${report.severity}">${report.severity.toUpperCase()}</span></td>
+          <td><span class="status-badge ${report.status}">${getStatusLabel(report.status)}</span></td>
+          <td>${report.date}</td>
+          <td>
+            <button class="action-btn view-btn" onclick="viewReportDetails(${report.id})">
+              <i class="fas fa-eye"></i> View
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Get category label
+    function getCategoryLabel(category) {
+      const labels = {
+        'fake_donor': 'Fake Donor',
+        'inappropriate_behavior': 'Inappropriate Behavior',
+        'no_show': 'No Show',
+        'harassment': 'Harassment',
+        'fraud': 'Fraud/Scam',
+        'other': 'Other'
+      };
+      return labels[category] || category;
+    }
+
+    // Get status label
+    function getStatusLabel(status) {
+      const labels = {
+        'new': 'New',
+        'in-review': 'In Review',
+        'resolved': 'Resolved',
+        'action-taken': 'Action Taken'
+      };
+      return labels[status] || status;
+    }
+
+    // View report details
+    function viewReportDetails(reportId) {
+      const report = reports.find(r => r.id === reportId);
+      if (!report) return;
+      
+      const details = `
+        Donor: ${report.donorName}
+        Category: ${getCategoryLabel(report.category)}
+        Severity: ${report.severity.toUpperCase()}
+        Description: ${report.description}
+        Incident Date: ${report.incidentDate}
+        Status: ${getStatusLabel(report.status)}
+        Submitted: ${report.date}
+        Evidence: ${report.evidence}
+      `;
+      
+      alert(details);
+    }
+
+    // Show notification
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.innerHTML = `
+        <div class="notification-content">
+          <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => notification.classList.add('show'), 100);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (document.body.contains(notification)) {
+            document.body.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+
+    // Initialize reporting system when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // ... existing code ...
+      initReportingSystem();
+    });
+  </script>
+  <script src="js/api.js"></script>
+  <script src="js/socket-service.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

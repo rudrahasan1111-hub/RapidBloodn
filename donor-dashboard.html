@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donor Dashboard - RapidBlood</title>
+  <link rel="stylesheet" href="css/donor-dashboard.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <span class="logo"><i class="fas fa-heartbeat"></i> RapidBlood</span>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="donor-registration.html">Donor Registration</a></li>
+        <li><a href="recipient-registration.html">Recipient Registration</a></li>
+        <li class="language-switcher">
+          <select id="languageSelect" onchange="changeLanguage(this.value)">
+            <option value="en">🇺🇸 English</option>
+            <option value="bn">🇧🇩 বাংলা</option>
+          </select>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <div class="welcome-section">
+          <div class="user-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="user-info">
+            <h2>Welcome, <span id="donorName">Donor</span></h2>
+            <p>Thank you for being a life-saver!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-content">
+        <div class="profile-section">
+          <h3><i class="fas fa-user"></i> <span data-i18n="profileInformation">Profile Information</span></h3>
+          <div class="profile-grid">
+            <div class="profile-item">
+              <i class="fas fa-envelope"></i>
+              <div>
+                <label data-i18n="email">Email:</label>
+                <span id="donorEmail"></span>
+              </div>
+            </div>
+            <div class="profile-item">
+              <i class="fas fa-phone"></i>
+              <div>
+                <label data-i18n="phone">Phone:</label>
+                <span id="donorPhone"></span>
+              </div>
+            </div>
+            <div class="profile-item">
+              <i class="fas fa-tint"></i>
+              <div>
+                <label data-i18n="bloodGroup">Blood Group:</label>
+                <span id="donorBlood"></span>
+              </div>
+            </div>
+            <div class="profile-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <label data-i18n="location">Location:</label>
+                <span id="donorLocation"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="availability-section">
+          <h3><i class="fas fa-calendar-check"></i> <span data-i18n="updateAvailability">Update Availability</span></h3>
+          <div class="availability-controls">
+            <button onclick="updateAvailability(true)" class="availability-btn available" id="availableBtn">
+              <i class="fas fa-check-circle"></i> <span data-i18n="availableForDonation">Available for Donation</span>
+            </button>
+            <button onclick="updateAvailability(false)" class="availability-btn unavailable" id="unavailableBtn">
+              <i class="fas fa-times-circle"></i> <span data-i18n="currentlyUnavailable">Currently Unavailable</span>
+            </button>
+          </div>
+          <p class="availability-note" data-i18n="availabilityNote">Your availability status helps recipients find you quickly</p>
+        </div>
+
+        <!-- Notification Center -->
+        <div class="notification-center-section">
+          <h3><i class="fas fa-bell"></i> Notification Center</h3>
+          <div id="notificationCenter" class="notification-center-list">
+            <div class="no-notifications">
+              <i class="fas fa-bell-slash"></i>
+              <p>No notifications at the moment</p>
+              <span>You'll see important updates and emergency alerts here</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Report Notifications Section -->
+        <div class="report-notifications-section" id="reportNotificationsSection" style="display: none;">
+          <h3><i class="fas fa-flag"></i> Report Notifications</h3>
+          <div class="report-notification-content">
+            <div class="report-alert">
+              <i class="fas fa-exclamation-triangle"></i>
+              <div class="report-alert-content">
+                <h4>Report Received</h4>
+                <p>A report has been filed against your account. Please review the details below.</p>
+                <div class="report-details" id="donorReportDetails">
+                  <!-- Report details will be loaded here -->
+                </div>
+                <div class="report-actions">
+                  <button class="btn-secondary" onclick="acknowledgeReport()">
+                    <i class="fas fa-check"></i> Acknowledge
+                  </button>
+                  <button class="btn-primary" onclick="respondToReport()">
+                    <i class="fas fa-reply"></i> Respond to Report
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+
+        <!-- Emergency Alerts Section -->
+        <div class="emergency-alerts-section">
+          <h3><i class="fas fa-exclamation-triangle"></i> <span data-i18n="emergencyAlerts">Emergency Alerts</span></h3>
+          <div id="emergencyAlerts" class="emergency-alerts-list">
+            <div class="no-emergencies">
+              <i class="fas fa-shield-alt"></i>
+              <p data-i18n="noEmergencyAlerts">No emergency alerts at the moment</p>
+              <span data-i18n="noEmergencyAlertsNote">You'll be notified immediately for urgent blood requests</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="requests-section">
+          <h3><i class="fas fa-heart"></i> <span data-i18n="bloodRequestsReceived">Blood Requests Received</span></h3>
+          <div id="bloodRequestsList" class="requests-list">
+            <div class="no-requests">
+              <i class="fas fa-heart-broken"></i>
+              <p data-i18n="noBloodRequests">No blood requests at the moment</p>
+              <span data-i18n="noBloodRequestsNote">You'll be notified when someone needs your blood type</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-section">
+          <h3><i class="fas fa-comments"></i> Chat with Recipients</h3>
+          <div class="chat-container">
+            <div class="chat-users">
+              <h4>Available Recipients</h4>
+              <div id="recipientList" class="user-list">
+                <!-- Recipients will be loaded here -->
+              </div>
+            </div>
+            <div class="chat-messages">
+              <div id="chatHeader" class="chat-header">
+                <span>Select a recipient to start chatting</span>
+              </div>
+              <div id="messageArea" class="message-area">
+                <div class="no-chat-selected">
+                  <i class="fas fa-comments"></i>
+                  <p>Choose a recipient from the list to start a conversation</p>
+                </div>
+              </div>
+              <div class="message-input">
+                <input type="text" id="messageInput" placeholder="Type your message..." disabled>
+                <button id="sendButton" onclick="sendMessage()" disabled>
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-actions">
+          <button onclick="logout()" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/languages.js"></script>
+  <script src="js/global-language.js"></script>
+  <script>
+    // Language switcher function
+    function changeLanguage(lang) {
+      if (LanguageManager.changeLanguage(lang)) {
+        // Update language selector
+        document.getElementById('languageSelect').value = lang;
+        
+        // Show success message
+        showLanguageNotification(lang);
+      }
+    }
+    
+    // Show language change notification
+    function showLanguageNotification(lang) {
+      const langNames = { en: 'English', bn: 'বাংলা' };
+      const message = lang === 'bn' ? 
+        `ভাষা পরিবর্তন হয়েছে: ${langNames[lang]}` : 
+        `Language changed to: ${langNames[lang]}`;
+      
+      // Create notification
+      const notification = document.createElement('div');
+      notification.className = 'language-notification';
+      notification.innerHTML = `
+        <div class="notification-content">
+          <i class="fas fa-globe"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => notification.classList.add('show'), 100);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (document.body.contains(notification)) {
+            document.body.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+    
+    // Initialize language system
+    document.addEventListener('DOMContentLoaded', function() {
+      LanguageManager.init();
+      
+      // Set current language in selector
+      const currentLang = LanguageManager.getCurrentLanguage();
+      document.getElementById('languageSelect').value = currentLang;
+      
+      // Initialize donor notification system
+      initDonorNotificationSystem();
+    });
+
+    // Donor Notification System
+    let donorReports = [];
+    let isAvailable = true; // Track current availability status
+
+    // Initialize donor notification system
+    function initDonorNotificationSystem() {
+      loadMockDonorReports();
+      checkForReports();
+      initializeAvailability();
+    }
+
+    // Initialize availability status
+    function initializeAvailability() {
+      // Set initial state - available by default
+      updateAvailabilityUI(true);
+    }
+
+    // Update availability status
+    function updateAvailability(available) {
+      isAvailable = available;
+      updateAvailabilityUI(available);
+      
+      // Show appropriate message
+      if (available) {
+        showNotification('You are now available for donation!', 'success');
+      } else {
+        showNotification('You are now marked as unavailable for donation.', 'info');
+      }
+    }
+
+    // Update availability UI
+    function updateAvailabilityUI(available) {
+      const availableBtn = document.getElementById('availableBtn');
+      const unavailableBtn = document.getElementById('unavailableBtn');
+      
+      if (available) {
+        availableBtn.classList.add('active');
+        unavailableBtn.classList.remove('active');
+      } else {
+        availableBtn.classList.remove('active');
+        unavailableBtn.classList.add('active');
+      }
+    }
+
+    // Load mock reports for demonstration
+    function loadMockDonorReports() {
+      // Simulate reports that might be filed against this donor
+      donorReports = [
+        {
+          id: 1,
+          category: 'no_show',
+          severity: 'medium',
+          status: 'new',
+          description: 'Did not show up for scheduled donation at Dhaka Medical College',
+          incidentDate: '2024-01-24',
+          adminNotes: 'Report filed by recipient. Awaiting donor response.'
+        }
+      ];
+    }
+
+    // Check if donor has any reports
+    function checkForReports() {
+      if (donorReports.length > 0) {
+        showReportNotification();
+      }
+    }
+
+    // Show report notification
+    function showReportNotification() {
+      const section = document.getElementById('reportNotificationsSection');
+      const detailsDiv = document.getElementById('donorReportDetails');
+      
+      if (donorReports.length > 0) {
+        const report = donorReports[0];
+        detailsDiv.innerHTML = `
+          <div class="report-info">
+            <div class="report-item">
+              <label>Category:</label>
+              <span>${getCategoryLabel(report.category)}</span>
+            </div>
+            <div class="report-item">
+              <label>Severity:</label>
+              <span class="severity-badge ${report.severity}">${report.severity.toUpperCase()}</span>
+            </div>
+            <div class="report-item">
+              <label>Incident Date:</label>
+              <span>${report.incidentDate}</span>
+            </div>
+            <div class="report-item full-width">
+              <label>Description:</label>
+              <p>${report.description}</p>
+            </div>
+            <div class="report-item full-width">
+              <label>Admin Notes:</label>
+              <p>${report.adminNotes}</p>
+            </div>
+          </div>
+        `;
+        
+        section.style.display = 'block';
+      }
+    }
+
+    // Acknowledge report
+    function acknowledgeReport() {
+      if (donorReports.length > 0) {
+        donorReports[0].status = 'acknowledged';
+        showNotification('Report acknowledged. Thank you for your response.', 'success');
+        
+        // Hide the notification section after acknowledgment
+        setTimeout(() => {
+          document.getElementById('reportNotificationsSection').style.display = 'none';
+        }, 2000);
+      }
+    }
+
+    // Respond to report
+    function respondToReport() {
+      const response = prompt('Please provide your response to the report:');
+      if (response && response.trim()) {
+        donorReports[0].status = 'responded';
+        donorReports[0].donorResponse = response;
+        showNotification('Your response has been submitted. Thank you.', 'success');
+        
+        // Hide the notification section after response
+        setTimeout(() => {
+          document.getElementById('reportNotificationsSection').style.display = 'none';
+        }, 2000);
+      }
+    }
+
+    // Get category label
+    function getCategoryLabel(category) {
+      const labels = {
+        'fake_donor': 'Fake Donor',
+        'inappropriate_behavior': 'Inappropriate Behavior',
+        'no_show': 'No Show',
+        'harassment': 'Harassment',
+        'fraud': 'Fraud/Scam',
+        'other': 'Other'
+      };
+      return labels[category] || category;
+    }
+
+    // Show notification
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.innerHTML = `
+        <div class="notification-content">
+          <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => notification.classList.add('show'), 100);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (document.body.contains(notification)) {
+            document.body.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+  </script>
+  <script src="js/api.js"></script>
+  <script src="js/socket-service.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

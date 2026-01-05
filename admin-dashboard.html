@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - RapidBlood</title>
+  <link rel="stylesheet" href="css/admin-dashboard.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <span class="logo"><i class="fas fa-heartbeat"></i> RapidBlood</span>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="donor-registration.html">Donor Registration</a></li>
+        <li><a href="recipient-registration.html">Recipient Registration</a></li>
+        <li class="language-switcher">
+          <select id="languageSelect" onchange="changeLanguage(this.value)">
+            <option value="en">🇺🇸 English</option>
+            <option value="bn">🇧🇩 বাংলা</option>
+          </select>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <div class="welcome-section">
+          <div class="admin-avatar">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div class="admin-info">
+            <h2>Admin Dashboard</h2>
+            <p>Manage RapidBlood system and monitor user activity</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-content">
+        <div class="stats-section">
+          <h3><i class="fas fa-chart-bar"></i> <span data-i18n="systemStatistics">System Statistics</span></h3>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="stat-content">
+                <h4 data-i18n="totalDonors">Total Donors</h4>
+                <span id="totalDonors">0</span>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-user-injured"></i>
+              </div>
+              <div class="stat-content">
+                <h4 data-i18n="totalRecipients">Total Recipients</h4>
+                <span id="totalRecipients">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tables-section">
+          <div class="donors-table">
+            <h3><i class="fas fa-users"></i> <span data-i18n="registeredDonors">Registered Donors</span></h3>
+            <div class="table-container">
+              <table id="donorTable" class="data-table">
+                <thead>
+                  <tr>
+                    <th><i class="fas fa-user"></i> <span data-i18n="name">Name</span></th>
+                    <th><i class="fas fa-tint"></i> <span data-i18n="bloodGroup">Blood Group</span></th>
+                    <th><i class="fas fa-map-marker-alt"></i> <span data-i18n="location">Location</span></th>
+                    <th><i class="fas fa-phone"></i> <span data-i18n="phone">Phone</span></th>
+                  </tr>
+                </thead>
+                <tbody id="donorTableBody">
+                  <!-- Donor data will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="recipients-table">
+            <h3><i class="fas fa-user-injured"></i> <span data-i18n="registeredRecipients">Registered Recipients</span></h3>
+            <div class="table-container">
+              <table id="recipientTable" class="data-table">
+                <thead>
+                  <tr>
+                    <th><i class="fas fa-user"></i> <span data-i18n="name">Name</span></th>
+                    <th><i class="fas fa-tint"></i> <span data-i18n="bloodGroupNeeded">Blood Group Needed</span></th>
+                    <th><i class="fas fa-map-marker-alt"></i> <span data-i18n="location">Location</span></th>
+                    <th><i class="fas fa-phone"></i> <span data-i18n="phone">Phone</span></th>
+                  </tr>
+                </thead>
+                <tbody id="recipientTableBody">
+                  <!-- Recipient data will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hospital Management Section -->
+        <div class="hospitals-section">
+          <h3><i class="fas fa-hospital"></i> Hospital Management</h3>
+          <div class="hospital-controls">
+            <button onclick="addNewHospital()" class="btn-add-hospital">
+              <i class="fas fa-plus"></i> Add New Hospital
+            </button>
+          </div>
+          <div class="table-container">
+            <table id="hospitalTable" class="data-table">
+              <thead>
+                <tr>
+                  <th><i class="fas fa-hospital"></i> Hospital Name</th>
+                  <th><i class="fas fa-map-marker-alt"></i> Location</th>
+                  <th><i class="fas fa-phone"></i> Contact</th>
+                  <th><i class="fas fa-tint"></i> Blood Needs</th>
+                  <th><i class="fas fa-cog"></i> Actions</th>
+                </tr>
+              </thead>
+              <tbody id="hospitalTableBody">
+                <!-- Hospital data will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Emergency Requests Overview -->
+        <div class="emergency-overview-section">
+          <h3><i class="fas fa-exclamation-triangle"></i> Emergency Requests Overview</h3>
+          <div class="emergency-stats">
+            <div class="emergency-stat-card">
+              <div class="stat-icon critical">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <div class="stat-content">
+                <h4>Critical Requests</h4>
+                <span id="criticalRequests">0</span>
+              </div>
+            </div>
+            <div class="emergency-stat-card">
+              <div class="stat-icon high">
+                <i class="fas fa-exclamation-circle"></i>
+              </div>
+              <div class="stat-content">
+                <h4>High Priority</h4>
+                <span id="highRequests">0</span>
+              </div>
+            </div>
+            <div class="emergency-stat-card">
+              <div class="stat-icon active">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="stat-content">
+                <h4>Active Requests</h4>
+                <span id="activeRequests">0</span>
+              </div>
+            </div>
+            <div class="emergency-stat-card">
+              <div class="stat-icon resolved">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="stat-content">
+                <h4>Resolved Today</h4>
+                <span id="resolvedToday">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Donor Reports Management Section -->
+        <div class="reports-section">
+          <h3><i class="fas fa-flag"></i> <span data-i18n="donorReports">Donor Reports Management</span></h3>
+          
+          <!-- Reports Statistics -->
+          <div class="reports-stats">
+            <div class="report-stat-card">
+              <div class="stat-icon new">
+                <i class="fas fa-exclamation-circle"></i>
+              </div>
+              <div class="stat-content">
+                <h4>New Reports</h4>
+                <span id="newReports">0</span>
+              </div>
+            </div>
+            <div class="report-stat-card">
+              <div class="stat-icon review">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="stat-content">
+                <h4>Under Review</h4>
+                <span id="underReview">0</span>
+              </div>
+            </div>
+            <div class="report-stat-card">
+              <div class="stat-icon resolved">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="stat-content">
+                <h4>Resolved</h4>
+                <span id="resolvedReports">0</span>
+              </div>
+            </div>
+            <div class="report-stat-card">
+              <div class="stat-icon action">
+                <i class="fas fa-gavel"></i>
+              </div>
+              <div class="stat-content">
+                <h4>Action Taken</h4>
+                <span id="actionTaken">0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reports Filters -->
+          <div class="reports-filters">
+            <div class="filter-group">
+              <label for="statusFilter">Status:</label>
+              <select id="statusFilter" onchange="filterReports()">
+                <option value="">All Status</option>
+                <option value="new">New</option>
+                <option value="in-review">In Review</option>
+                <option value="resolved">Resolved</option>
+                <option value="action-taken">Action Taken</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="severityFilter">Severity:</label>
+              <select id="severityFilter" onchange="filterReports()">
+                <option value="">All Severity</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="critical">Critical</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="categoryFilter">Category:</label>
+              <select id="categoryFilter" onchange="filterReports()">
+                <option value="">All Categories</option>
+                <option value="fake_donor">Fake Donor</option>
+                <option value="inappropriate_behavior">Inappropriate Behavior</option>
+                <option value="no_show">No Show</option>
+                <option value="harassment">Harassment</option>
+                <option value="fraud">Fraud/Scam</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <button onclick="clearFilters()" class="clear-filters-btn">
+                <i class="fas fa-times"></i> Clear Filters
+              </button>
+            </div>
+          </div>
+
+          <!-- Reports Table -->
+          <div class="reports-table-container">
+            <table id="reportsTable" class="reports-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Donor</th>
+                  <th>Category</th>
+                  <th>Severity</th>
+                  <th>Status</th>
+                  <th>Reporter</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="reportsTableBody">
+                <!-- Reports will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Report Details Modal -->
+        <div id="reportDetailsModal" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3><i class="fas fa-flag"></i> Report Details</h3>
+              <span class="close" onclick="closeReportDetailsModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="reportDetailsBody">
+              <!-- Report details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+              <div class="action-buttons">
+                <button class="btn-secondary" onclick="markUnderReview()">
+                  <i class="fas fa-clock"></i> Mark Under Review
+                </button>
+                <button class="btn-warning" onclick="terminateDonor()">
+                  <i class="fas fa-user-times"></i> Terminate Account
+                </button>
+                <button class="btn-primary" onclick="resolveReport()">
+                  <i class="fas fa-check"></i> Resolve Report
+                </button>
+              </div>
+              <div class="admin-notes">
+                <label for="adminNotes">Admin Notes:</label>
+                <textarea id="adminNotes" rows="3" placeholder="Add internal notes..."></textarea>
+                <button class="btn-secondary" onclick="saveAdminNotes()">
+                  <i class="fas fa-save"></i> Save Notes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-actions">
+          <button onclick="logout()" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/languages.js"></script>
+  <script src="js/global-language.js"></script>
+  <script>
+    // Language switcher function
+    function changeLanguage(lang) {
+      if (LanguageManager.changeLanguage(lang)) {
+        // Update language selector
+        document.getElementById('languageSelect').value = lang;
+        
+        // Show success message
+        showLanguageNotification(lang);
+      }
+    }
+    
+    // Show language change notification
+    function showLanguageNotification(lang) {
+      const langNames = { en: 'English', bn: 'বাংলা' };
+      const message = lang === 'bn' ? 
+        `ভাষা পরিবর্তন হয়েছে: ${langNames[lang]}` : 
+        `Language changed to: ${langNames[lang]}`;
+      
+      // Create notification
+      const notification = document.createElement('div');
+      notification.className = 'language-notification';
+      notification.innerHTML = `
+        <div class="notification-content">
+          <i class="fas fa-globe"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => notification.classList.add('show'), 100);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (document.body.contains(notification)) {
+            document.body.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+    
+    // Initialize language system
+    document.addEventListener('DOMContentLoaded', function() {
+      LanguageManager.init();
+      
+      // Set current language in selector
+      const currentLang = LanguageManager.getCurrentLanguage();
+      document.getElementById('languageSelect').value = currentLang;
+      
+      // Initialize reports management system
+      initReportsManagement();
+    });
+
+    // Donor Reports Management System
+    let allReports = [];
+    let currentReport = null;
+
+    // Initialize reports management
+    function initReportsManagement() {
+      loadMockReports();
+      updateReportStats();
+      displayReports();
+    }
+
+    // Load mock reports for demonstration
+    function loadMockReports() {
+      allReports = [
+        {
+          id: 1,
+          date: '2024-01-25',
+          donorName: 'John Smith',
+          donorId: 1,
+          category: 'no_show',
+          severity: 'medium',
+          status: 'new',
+          reporter: 'Recipient A',
+          description: 'Donor did not show up for scheduled donation at Dhaka Medical College',
+          incidentDate: '2024-01-24',
+          contactPreference: 'identified',
+          evidence: 'Yes',
+          adminNotes: ''
+        },
+        {
+          id: 2,
+          date: '2024-01-24',
+          donorName: 'Sarah Johnson',
+          donorId: 2,
+          category: 'inappropriate_behavior',
+          severity: 'high',
+          status: 'in-review',
+          reporter: 'Recipient B',
+          description: 'Inappropriate messages during chat, made recipient uncomfortable',
+          incidentDate: '2024-01-23',
+          contactPreference: 'anonymous',
+          evidence: 'Yes',
+          adminNotes: 'Contacted donor for explanation. Awaiting response.'
+        },
+        {
+          id: 3,
+          date: '2024-01-23',
+          donorName: 'Mike Wilson',
+          donorId: 3,
+          category: 'fake_donor',
+          severity: 'critical',
+          status: 'action-taken',
+          reporter: 'Recipient C',
+          description: 'Donor provided false information and fake documents',
+          incidentDate: '2024-01-22',
+          contactPreference: 'identified',
+          evidence: 'Yes',
+          adminNotes: 'Account terminated. Reported to authorities.'
+        },
+        {
+          id: 4,
+          date: '2024-01-22',
+          donorName: 'Emily Brown',
+          donorId: 4,
+          category: 'harassment',
+          severity: 'high',
+          status: 'resolved',
+          reporter: 'Recipient D',
+          description: 'Repeated unwanted contact after donation',
+          incidentDate: '2024-01-21',
+          contactPreference: 'anonymous',
+          evidence: 'Yes',
+          adminNotes: 'Warning issued. Donor apologized and promised to stop.'
+        }
+      ];
+    }
+
+    // Update report statistics
+    function updateReportStats() {
+      const stats = {
+        new: allReports.filter(r => r.status === 'new').length,
+        'in-review': allReports.filter(r => r.status === 'in-review').length,
+        resolved: allReports.filter(r => r.status === 'resolved').length,
+        'action-taken': allReports.filter(r => r.status === 'action-taken').length
+      };
+
+      document.getElementById('newReports').textContent = stats.new;
+      document.getElementById('underReview').textContent = stats['in-review'];
+      document.getElementById('resolvedReports').textContent = stats.resolved;
+      document.getElementById('actionTaken').textContent = stats['action-taken'];
+    }
+
+    // Display reports in table
+    function displayReports(filteredReports = null) {
+      const reports = filteredReports || allReports;
+      const tbody = document.getElementById('reportsTableBody');
+      tbody.innerHTML = '';
+
+      if (reports.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; color: #6c757d;">
+              <i class="fas fa-inbox"></i> No reports found
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      reports.forEach(report => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${report.date}</td>
+          <td>${report.donorName}</td>
+          <td>${getCategoryLabel(report.category)}</td>
+          <td><span class="severity-badge ${report.severity}">${report.severity.toUpperCase()}</span></td>
+          <td><span class="status-badge ${report.status}">${getStatusLabel(report.status)}</span></td>
+          <td>${report.contactPreference === 'anonymous' ? 'Anonymous' : report.reporter}</td>
+          <td>
+            <button class="action-btn view-btn" onclick="viewReportDetails(${report.id})">
+              <i class="fas fa-eye"></i> View
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Filter reports
+    function filterReports() {
+      const statusFilter = document.getElementById('statusFilter').value;
+      const severityFilter = document.getElementById('severityFilter').value;
+      const categoryFilter = document.getElementById('categoryFilter').value;
+
+      let filtered = allReports;
+
+      if (statusFilter) {
+        filtered = filtered.filter(r => r.status === statusFilter);
+      }
+      if (severityFilter) {
+        filtered = filtered.filter(r => r.severity === severityFilter);
+      }
+      if (categoryFilter) {
+        filtered = filtered.filter(r => r.category === categoryFilter);
+      }
+
+      displayReports(filtered);
+    }
+
+    // Clear filters
+    function clearFilters() {
+      document.getElementById('statusFilter').value = '';
+      document.getElementById('severityFilter').value = '';
+      document.getElementById('categoryFilter').value = '';
+      displayReports();
+    }
+
+    // View report details
+    function viewReportDetails(reportId) {
+      currentReport = allReports.find(r => r.id === reportId);
+      if (!currentReport) return;
+
+      const modal = document.getElementById('reportDetailsModal');
+      const body = document.getElementById('reportDetailsBody');
+      const notes = document.getElementById('adminNotes');
+
+      body.innerHTML = `
+        <div class="report-details">
+          <div class="detail-row">
+            <label>Report ID:</label>
+            <span>#${currentReport.id}</span>
+          </div>
+          <div class="detail-row">
+            <label>Donor:</label>
+            <span>${currentReport.donorName}</span>
+          </div>
+          <div class="detail-row">
+            <label>Category:</label>
+            <span>${getCategoryLabel(currentReport.category)}</span>
+          </div>
+          <div class="detail-row">
+            <label>Severity:</label>
+            <span class="severity-badge ${currentReport.severity}">${currentReport.severity.toUpperCase()}</span>
+          </div>
+          <div class="detail-row">
+            <label>Status:</label>
+            <span class="status-badge ${currentReport.status}">${getStatusLabel(currentReport.status)}</span>
+          </div>
+          <div class="detail-row">
+            <label>Reporter:</label>
+            <span>${currentReport.contactPreference === 'anonymous' ? 'Anonymous' : currentReport.reporter}</span>
+          </div>
+          <div class="detail-row">
+            <label>Incident Date:</label>
+            <span>${currentReport.incidentDate}</span>
+          </div>
+          <div class="detail-row">
+            <label>Evidence:</label>
+            <span>${currentReport.evidence}</span>
+          </div>
+          <div class="detail-row full-width">
+            <label>Description:</label>
+            <p>${currentReport.description}</p>
+          </div>
+        </div>
+      `;
+
+      notes.value = currentReport.adminNotes || '';
+      modal.style.display = 'block';
+    }
+
+    // Close report details modal
+    function closeReportDetailsModal() {
+      document.getElementById('reportDetailsModal').style.display = 'none';
+      currentReport = null;
+    }
+
+    // Mark report under review
+    function markUnderReview() {
+      if (!currentReport) return;
+      
+      currentReport.status = 'in-review';
+      updateReportStats();
+      displayReports();
+      closeReportDetailsModal();
+      showNotification('Report marked as under review', 'success');
+    }
+
+    // Terminate donor account
+    function terminateDonor() {
+      if (!currentReport) return;
+      
+      if (confirm(`Are you sure you want to terminate ${currentReport.donorName}'s account? This action cannot be undone.`)) {
+        currentReport.status = 'action-taken';
+        updateReportStats();
+        displayReports();
+        closeReportDetailsModal();
+        showNotification(`Account terminated for ${currentReport.donorName}`, 'success');
+      }
+    }
+
+    // Resolve report
+    function resolveReport() {
+      if (!currentReport) return;
+      
+      currentReport.status = 'resolved';
+      updateReportStats();
+      displayReports();
+      closeReportDetailsModal();
+      showNotification('Report marked as resolved', 'success');
+    }
+
+    // Save admin notes
+    function saveAdminNotes() {
+      if (!currentReport) return;
+      
+      const notes = document.getElementById('adminNotes').value;
+      currentReport.adminNotes = notes;
+      showNotification('Admin notes saved', 'success');
+    }
+
+    // Get category label
+    function getCategoryLabel(category) {
+      const labels = {
+        'fake_donor': 'Fake Donor',
+        'inappropriate_behavior': 'Inappropriate Behavior',
+        'no_show': 'No Show',
+        'harassment': 'Harassment',
+        'fraud': 'Fraud/Scam',
+        'other': 'Other'
+      };
+      return labels[category] || category;
+    }
+
+    // Get status label
+    function getStatusLabel(status) {
+      const labels = {
+        'new': 'New',
+        'in-review': 'In Review',
+        'resolved': 'Resolved',
+        'action-taken': 'Action Taken'
+      };
+      return labels[status] || status;
+    }
+
+    // Show notification
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.innerHTML = `
+        <div class="notification-content">
+          <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => notification.classList.add('show'), 100);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (document.body.contains(notification)) {
+            document.body.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+  </script>
+  <script src="js/api.js"></script>
+  <script src="js/socket-service.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

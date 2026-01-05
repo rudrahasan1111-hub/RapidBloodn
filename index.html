@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RapidBlood - Connect. Donate. Save Lives.</title>
+  <link rel="stylesheet" href="css/index.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <span class="logo"><i class="fas fa-heartbeat"></i> RapidBlood</span>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="donor-registration.html">Donor Registration</a></li>
+        <li><a href="recipient-registration.html">Recipient Registration</a></li>
+        <li><a href="demo.html">Demo</a></li>
+        <li class="language-switcher">
+          <select id="languageSelect" onchange="changeLanguage(this.value)">
+            <option value="en">🇺🇸 English</option>
+            <option value="bn">🇧🇩 বাংলা</option>
+          </select>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 data-i18n="heroTitle">Connect. Donate. Save Lives.</h1>
+        <p data-i18n="heroSubtitle">Join RapidBlood — the smart blood donation system built to connect donors and recipients in real-time. Every drop counts, every donor matters.</p>
+        <div class="hero-buttons">
+          <a href="donor-registration.html" class="btn btn-primary" data-i18n="becomeDonor">Become a Donor</a>
+          <a href="recipient-registration.html" class="btn btn-secondary" data-i18n="needBlood">Request Blood</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="blood-drop-animation">
+          <i class="fas fa-tint"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="donation-hero">
+    <div class="container">
+      <div class="donation-content">
+        <div class="donation-image">
+          <img src="https://surgmedia.com/wp-content/uploads/2020/10/2171-blood-donation.jpg" alt="Blood Donation Process" />
+        </div>
+        <div class="donation-quote">
+          <h2 data-i18n="donationQuote">"Every drop counts. Donate blood and be the reason for someone's heartbeat."</h2>
+          <p data-i18n="donationDescription">Your donation can save up to three lives. Join our community of heroes who give the gift of life.</p>
+          <a href="donor-registration.html" class="btn btn-primary"><i class="fas fa-heart"></i> <span data-i18n="donateNow">Donate Now</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="why-donate">
+    <div class="container">
+      <h2 data-i18n="whyDonate">Why Donate?</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="fas fa-heartbeat"></i>
+          </div>
+          <h3 data-i18n="benefit1Title">Reduces harmful iron levels</h3>
+          <p data-i18n="benefit1Desc">Especially beneficial for people with hemochromatosis.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="fas fa-heart"></i>
+          </div>
+          <h3 data-i18n="benefit2Title">Improves cardiovascular health</h3>
+          <p data-i18n="benefit2Desc">Some studies show it reduces risk of heart attacks and strokes.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="fas fa-tint"></i>
+          </div>
+          <h3 data-i18n="benefit3Title">Stimulates new blood cell production</h3>
+          <p data-i18n="benefit3Desc">Keeps your circulatory system active and healthy.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="fas fa-stethoscope"></i>
+          </div>
+          <h3 data-i18n="benefit4Title">Free health check</h3>
+          <p data-i18n="benefit4Desc">Each donation includes blood pressure, hemoglobin, pulse, and infection screening.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <i class="fas fa-users"></i>
+          <h3 data-i18n="stat1Number">10,000+</h3>
+          <p data-i18n="stat1Label">Registered Donors</p>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-heart"></i>
+          <h3 data-i18n="stat2Number">5,000+</h3>
+          <p data-i18n="stat2Label">Lives Saved</p>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-hospital"></i>
+          <h3 data-i18n="stat3Number">500+</h3>
+          <p data-i18n="stat3Label">Partner Hospitals</p>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-clock"></i>
+          <h3 data-i18n="stat4Number">< 30 min</h3>
+          <p data-i18n="stat4Label">Average Response Time</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container">
+      <h2 data-i18n="howItWorks">How It Works</h2>
+      <div class="feature-grid">
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-user-edit"></i>
+          </div>
+          <h3 data-i18n="step1Title">Register</h3>
+          <p data-i18n="step1Desc">Sign up as a donor or recipient. It's free, fast, and secure. Your information is protected and only shared when needed.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-search-location"></i>
+          </div>
+          <h3 data-i18n="step2Title">Real-Time Match</h3>
+          <p data-i18n="step2Desc">Our intelligent system finds matching, available donors based on blood type, location, and compatibility requirements.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-bell"></i>
+          </div>
+          <h3 data-i18n="step3Title">Instant Notifications</h3>
+          <p data-i18n="step3Desc">Donors receive immediate notifications for blood requests and can respond quickly to save lives.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-handshake"></i>
+          </div>
+          <h3 data-i18n="step4Title">Connect & Donate</h3>
+          <p data-i18n="step4Desc">Donors and recipients connect directly, coordinate donation, and complete the life-saving process together.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blood-types">
+    <div class="container">
+      <h2 data-i18n="bloodTypesWeSupport">Blood Types We Support</h2>
+      <div class="blood-types-grid">
+        <div class="blood-type">
+          <div class="blood-type-icon a-positive">A+</div>
+          <h4 data-i18n="bloodTypeA">A Positive</h4>
+          <p data-i18n="bloodTypeADesc">Most common blood type</p>
+        </div>
+        <div class="blood-type">
+          <div class="blood-type-icon a-negative">A-</div>
+          <h4 data-i18n="bloodTypeANeg">A Negative</h4>
+          <p data-i18n="bloodTypeANegDesc">Universal plasma donor</p>
+        </div>
+        <div class="blood-type">
+          <div class="blood-type-icon b-positive">B+</div>
+          <h4 data-i18n="bloodTypeB">B Positive</h4>
+          <p data-i18n="bloodTypeBDesc">Rare blood type</p>
+        </div>
+        <div class="blood-type">
+          <div class="blood-type-icon b-negative">B-</div>
+          <h4 data-i18n="bloodTypeBNeg">B Negative</h4>
+          <p data-i18n="bloodTypeBNegDesc">Very rare blood type</p>
+        </div>
+        <div class="blood-type">
+          <div class="blood-type-icon ab-positive">AB+</div>
+          <h4 data-i18n="bloodTypeAB">AB Positive</h4>
+          <p data-i18n="bloodTypeABDesc">Universal recipient</p>
+        </div>
+        <div class="blood-type">
+          <div class="blood-type-icon ab-negative">AB-</div>
+          <h4 data-i18n="bloodTypeABNeg">AB Negative</h4>
+          <p data-i18n="bloodTypeABNegDesc">Rarest blood type</p>
+        </div>
+        <div class="blood-type">
+          <div class="blood-type-icon o-positive">O+</div>
+          <h4 data-i18n="bloodTypeO">O Positive</h4>
+          <p data-i18n="bloodTypeODesc">Universal donor</p>
+        </div>
+        <div class="blood-type">
+          <div class="blood-type-icon o-negative">O-</div>
+          <h4 data-i18n="bloodTypeONeg">O Negative</h4>
+          <p data-i18n="bloodTypeONegDesc">Universal blood donor</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <div class="container">
+      <h2 data-i18n="whatOurCommunitySays">What Our Community Says</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial">
+          <div class="testimonial-content">
+            <i class="fas fa-quote-left"></i>
+            <p data-i18n="testimonial1">"RapidBlood helped me find a donor within 20 minutes when my father needed emergency surgery. The system is incredible!"</p>
+          </div>
+          <div class="testimonial-author">
+            <h4 data-i18n="testimonial1Author">Sarah Johnson</h4>
+            <p data-i18n="testimonial1Role">Blood Recipient</p>
+          </div>
+        </div>
+        <div class="testimonial">
+          <div class="testimonial-content">
+            <i class="fas fa-quote-left"></i>
+            <p data-i18n="testimonial2">"Being a donor through RapidBlood gives me peace of mind knowing I can help save lives whenever needed."</p>
+          </div>
+          <div class="testimonial-author">
+            <h4 data-i18n="testimonial2Author">Michael Chen</h4>
+            <p data-i18n="testimonial2Role">Blood Donor</p>
+          </div>
+        </div>
+        <div class="testimonial">
+          <div class="testimonial-content">
+            <i class="fas fa-quote-left"></i>
+            <p data-i18n="testimonial3">"The real-time matching system is revolutionary. We've reduced our blood shortage issues significantly."</p>
+          </div>
+          <div class="testimonial-author">
+            <h4 data-i18n="testimonial3Author">Dr. Emily Rodriguez</h4>
+            <p data-i18n="testimonial3Role">Hospital Administrator</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <div class="cta-section">
+        <h2 data-i18n="ctaTitle">Ready to Make a Difference?</h2>
+        <p data-i18n="ctaDesc">Join thousands of donors and recipients who are already saving lives with RapidBlood.</p>
+        <div class="cta-buttons">
+          <a href="donor-registration.html" class="btn btn-primary" data-i18n="ctaDonor">Start Donating</a>
+          <a href="recipient-registration.html" class="btn btn-secondary" data-i18n="ctaRecipient">Find Blood</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3><i class="fas fa-heartbeat"></i> RapidBlood</h3>
+          <p data-i18n="footerDescription">Connecting lives through blood donation. Every drop counts, every donor matters.</p>
+        </div>
+        <div class="footer-section">
+          <h4 data-i18n="quickLinks">Quick Links</h4>
+          <ul>
+            <li><a href="login.html" data-i18n="login">Login</a></li>
+            <li><a href="donor-registration.html" data-i18n="donorRegistration">Donor Registration</a></li>
+            <li><a href="recipient-registration.html" data-i18n="recipientRegistration">Recipient Registration</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4 data-i18n="contact">Contact</h4>
+          <p><i class="fas fa-envelope"></i> info@rapidblood.com</p>
+          <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p data-i18n="copyright">&copy; 2025 RapidBlood | Connecting Lives Through Blood Donation</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- AI Chatbot Widget -->
+  <div class="chatbot-widget" id="chatbotWidget">
+    <!-- Chatbot Header -->
+    <div class="chatbot-header" onclick="toggleChatbot()">
+      <div class="chatbot-avatar">
+        <i class="fas fa-robot"></i>
+      </div>
+      <div class="chatbot-info">
+        <h4 data-i18n="aiAssistant">AI Assistant</h4>
+        <p data-i18n="online24x7">Online 24/7</p>
+      </div>
+      <div class="chatbot-toggle">
+        <i class="fas fa-chevron-up" id="chatbotToggleIcon"></i>
+      </div>
+    </div>
+
+    <!-- Chatbot Body -->
+    <div class="chatbot-body" id="chatbotBody">
+      <!-- Welcome Message -->
+      <div class="chatbot-welcome">
+        <div class="welcome-avatar">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="welcome-message">
+          <h5 data-i18n="welcomeMessage">Hello! I'm your RapidBlood AI Assistant</h5>
+          <p data-i18n="howCanIHelp">How can I help you today? I can assist with:</p>
+          <div class="quick-actions">
+            <button class="quick-action-btn" onclick="sendQuickMessage('blood donation process')" data-i18n="bloodDonationProcess">Blood Donation Process</button>
+            <button class="quick-action-btn" onclick="sendQuickMessage('eligibility requirements')" data-i18n="eligibilityRequirements">Eligibility Requirements</button>
+            <button class="quick-action-btn" onclick="sendQuickMessage('find donors')" data-i18n="findDonors">Find Donors</button>
+            <button class="quick-action-btn" onclick="sendQuickMessage('emergency help')" data-i18n="emergencyHelp">Emergency Help</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Messages Container -->
+      <div class="chat-messages" id="chatMessages">
+        <!-- Messages will be added here dynamically -->
+      </div>
+
+      <!-- Chat Input -->
+      <div class="chat-input-container">
+        <input type="text" id="chatInput" placeholder="Type your question..." data-i18n-placeholder="typeYourQuestion" />
+        <button onclick="sendMessage()" class="send-btn">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/languages.js"></script>
+  <script src="js/global-language.js"></script>
+  <script>
+    // Language switcher function
+    function changeLanguage(lang) {
+      if (LanguageManager.changeLanguage(lang)) {
+        // Update selector
+        document.getElementById('languageSelect').value = lang;
+        
+        // Show notification
+        showLanguageNotification(lang);
+      }
+    }
+    
+    // Show language change notification
+    function showLanguageNotification(lang) {
+      const notification = document.createElement('div');
+      notification.className = 'language-notification';
+      notification.textContent = lang === 'bn' ? 'ভাষা বাংলায় পরিবর্তন করা হয়েছে' : 'Language changed to English';
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
+    
+    // Initialize language system
+    document.addEventListener('DOMContentLoaded', function() {
+      LanguageManager.init();
+      
+      // Set current language in selector
+      const currentLang = LanguageManager.getCurrentLanguage();
+      document.getElementById('languageSelect').value = currentLang;
+      
+      // Debug: Log current language
+      console.log('Current language:', currentLang);
+      console.log('Available languages:', LanguageManager.getAvailableLanguages());
+      
+      // Test translation
+      console.log('Test translation:', LanguageManager.t('home'));
+      
+      // Initialize chatbot
+      initializeChatbot();
+    });
+    
+    // Chatbot functionality
+    let chatbotOpen = true;
+    let chatHistory = [];
+    
+    function initializeChatbot() {
+      // Add welcome message to chat history
+      addBotMessage(LanguageManager.t('chatbotGreeting'));
+      
+      // Add event listener for Enter key in chat input
+      document.getElementById('chatInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          sendMessage();
+        }
+      });
+    }
+    
+    function toggleChatbot() {
+      const chatbotBody = document.getElementById('chatbotBody');
+      const toggleIcon = document.getElementById('chatbotToggleIcon');
+      
+      if (chatbotOpen) {
+        chatbotBody.classList.add('collapsed');
+        toggleIcon.classList.add('rotated');
+        chatbotOpen = false;
+      } else {
+        chatbotBody.classList.remove('collapsed');
+        toggleIcon.classList.remove('rotated');
+        chatbotOpen = true;
+      }
+    }
+    
+    function sendQuickMessage(topic) {
+      const chatInput = document.getElementById('chatInput');
+      chatInput.value = topic;
+      sendMessage();
+    }
+    
+    function sendMessage() {
+      const chatInput = document.getElementById('chatInput');
+      const message = chatInput.value.trim();
+      
+      if (message === '') return;
+      
+      // Add user message to chat
+      addUserMessage(message);
+      
+      // Clear input
+      chatInput.value = '';
+      
+      // Show typing indicator
+      showTypingIndicator();
+      
+      // Simulate AI processing delay
+      setTimeout(() => {
+        hideTypingIndicator();
+        const response = generateAIResponse(message);
+        addBotMessage(response);
+      }, 1000 + Math.random() * 2000); // Random delay between 1-3 seconds
+    }
+    
+    function addUserMessage(message) {
+      const chatMessages = document.getElementById('chatMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'chat-message user';
+      
+      messageDiv.innerHTML = `
+        <div class="message-avatar user">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="message-content user">${escapeHtml(message)}</div>
+      `;
+      
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      // Add to history
+      chatHistory.push({ type: 'user', message: message, timestamp: new Date() });
+    }
+    
+    function addBotMessage(message) {
+      const chatMessages = document.getElementById('chatMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'chat-message';
+      
+      messageDiv.innerHTML = `
+        <div class="message-avatar bot">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="message-content bot">${formatMessage(message)}</div>
+      `;
+      
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      // Add to history
+      chatHistory.push({ type: 'bot', message: message, timestamp: new Date() });
+    }
+    
+    function showTypingIndicator() {
+      const chatMessages = document.getElementById('chatMessages');
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'chat-message';
+      typingDiv.id = 'typingIndicator';
+      
+      typingDiv.innerHTML = `
+        <div class="message-avatar bot">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="typing-indicator">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <span style="margin-left: 10px; color: #6c757d; font-size: 12px;">${LanguageManager.t('chatbotTyping')}</span>
+        </div>
+      `;
+      
+      chatMessages.appendChild(typingDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function hideTypingIndicator() {
+      const typingIndicator = document.getElementById('typingIndicator');
+      if (typingIndicator) {
+        typingIndicator.remove();
+      }
+    }
+    
+    function generateAIResponse(userMessage) {
+      const message = userMessage.toLowerCase();
+      
+      // Blood donation process
+      if (message.includes('blood donation') || message.includes('donation process') || message.includes('how to donate')) {
+        return LanguageManager.t('bloodDonationProcessResponse');
+      }
+      
+      // Eligibility requirements
+      if (message.includes('eligibility') || message.includes('requirements') || message.includes('who can donate') || message.includes('age') || message.includes('weight')) {
+        return LanguageManager.t('eligibilityRequirementsResponse');
+      }
+      
+      // Finding donors
+      if (message.includes('find donor') || message.includes('search donor') || message.includes('locate donor') || message.includes('donor search')) {
+        return LanguageManager.t('findDonorsResponse');
+      }
+      
+      // Emergency help
+      if (message.includes('emergency') || message.includes('urgent') || message.includes('sos') || message.includes('critical') || message.includes('immediate')) {
+        return LanguageManager.t('emergencyHelpResponse');
+      }
+      
+      // Blood types
+      if (message.includes('blood type') || message.includes('a+') || message.includes('b+') || message.includes('ab+') || message.includes('o+') || message.includes('compatibility')) {
+        return LanguageManager.t('bloodTypeInfoResponse');
+      }
+      
+      // Safety
+      if (message.includes('safe') || message.includes('safety') || message.includes('risk') || message.includes('disease') || message.includes('infection')) {
+        return LanguageManager.t('safetyInfoResponse');
+      }
+      
+      // Frequency
+      if (message.includes('how often') || message.includes('frequency') || message.includes('every') || message.includes('days') || message.includes('weeks')) {
+        return LanguageManager.t('donationFrequencyResponse');
+      }
+      
+      // General help
+      if (message.includes('help') || message.includes('what can you do') || message.includes('assist') || message.includes('support')) {
+        return LanguageManager.t('generalHelpResponse');
+      }
+      
+      // Greeting
+      if (message.includes('hello') || message.includes('hi') || message.includes('hey') || message.includes('good morning') || message.includes('good afternoon')) {
+        return LanguageManager.t('chatbotGreeting');
+      }
+      
+      // Farewell
+      if (message.includes('bye') || message.includes('goodbye') || message.includes('thank you') || message.includes('thanks')) {
+        return LanguageManager.t('chatbotFarewell');
+      }
+      
+      // Default response
+      return LanguageManager.t('chatbotError');
+    }
+    
+    function formatMessage(message) {
+      // Convert markdown-style formatting to HTML
+      return message
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>')
+        .replace(/✅/g, '<span style="color: #28a745;">✅</span>')
+        .replace(/❌/g, '<span style="color: #dc3545;">❌</span>')
+        .replace(/🚨/g, '<span style="color: #dc3545;">🚨</span>')
+        .replace(/❤️/g, '<span style="color: #e74c3c;">❤️</span>')
+        .replace(/💪/g, '<span style="color: #f39c12;">💪</span>')
+        .replace(/🛡️/g, '<span style="color: #3498db;">🛡️</span>')
+        .replace(/⚡/g, '<span style="color: #f39c12;">⚡</span>');
+    }
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+  <script src="js/api.js"></script>
+  <script src="js/socket-service.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

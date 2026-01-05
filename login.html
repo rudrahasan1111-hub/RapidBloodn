@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - RapidBlood</title>
+  <link rel="stylesheet" href="css/login.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <span class="logo"><i class="fas fa-heartbeat"></i> RapidBlood</span>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="login.html" class="active">Login</a></li>
+        <li><a href="donor-registration.html">Donor Registration</a></li>
+        <li><a href="recipient-registration.html">Recipient Registration</a></li>
+        <li class="language-switcher">
+          <select id="languageSelect" onchange="changeLanguage(this.value)">
+            <option value="en">🇺🇸 English</option>
+            <option value="bn">🇧🇩 বাংলা</option>
+          </select>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    <div class="login-container">
+      <div class="login-header">
+        <div class="login-icon">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <h2 data-i18n="welcomeBack">Welcome Back</h2>
+        <p data-i18n="loginToAccount">Login to your RapidBlood account</p>
+      </div>
+      
+      <form onsubmit="loginUser(event)" class="login-form">
+        <div class="form-group">
+          <label for="email"><i class="fas fa-envelope"></i> <span data-i18n="emailAddress">Email Address</span></label>
+          <input type="email" id="email" required data-i18n-placeholder="emailPlaceholder" placeholder="Enter your email" />
+        </div>
+
+        <div class="form-group">
+          <label for="password"><i class="fas fa-lock"></i> <span data-i18n="password">Password</span></label>
+          <input type="password" id="password" required data-i18n-placeholder="passwordPlaceholder" placeholder="Enter your password" />
+        </div>
+
+        <div class="form-group">
+          <label for="loginType"><i class="fas fa-users"></i> <span data-i18n="loginAs">Login As</span></label>
+          <select id="loginType" required>
+            <option value="" data-i18n="selectRole">Select your role</option>
+            <option value="donor" data-i18n="donor">Donor</option>
+            <option value="recipient" data-i18n="recipient">Recipient</option>
+            <option value="admin" data-i18n="admin">Admin</option>
+          </select>
+        </div>
+
+        <button type="submit" class="login-btn">
+          <i class="fas fa-sign-in-alt"></i> <span data-i18n="login">Login</span>
+        </button>
+      </form>
+      
+      <div class="login-footer">
+        <p data-i18n="dontHaveAccount">Don't have an account?</p>
+        <div class="register-links">
+          <a href="donor-registration.html" class="register-link donor">
+            <i class="fas fa-user-plus"></i> <span data-i18n="registerAsDonor">Register as Donor</span>
+          </a>
+          <a href="recipient-registration.html" class="register-link recipient">
+            <i class="fas fa-search"></i> <span data-i18n="registerAsRecipient">Register as Recipient</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/languages.js"></script>
+  <script src="js/global-language.js"></script>
+  <script>
+    // Language switcher function
+    function changeLanguage(lang) {
+      if (LanguageManager.changeLanguage(lang)) {
+        // Update language selector
+        document.getElementById('languageSelect').value = lang;
+        
+        // Show success message
+        showLanguageNotification(lang);
+      }
+    }
+    
+    // Show language change notification
+    function showLanguageNotification(lang) {
+      const langNames = { en: 'English', bn: 'বাংলা' };
+      const message = lang === 'bn' ? 
+        `ভাষা পরিবর্তন হয়েছে: ${langNames[lang]}` : 
+        `Language changed to: ${langNames[lang]}`;
+      
+      // Create notification
+      const notification = document.createElement('div');
+      notification.className = 'language-notification';
+      notification.innerHTML = `
+        <div class="notification-content">
+          <i class="fas fa-globe"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => notification.classList.add('show'), 100);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (document.body.contains(notification)) {
+            document.body.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+    
+    // Initialize language system
+    document.addEventListener('DOMContentLoaded', function() {
+      LanguageManager.init();
+      
+      // Set current language in selector
+      const currentLang = LanguageManager.getCurrentLanguage();
+      document.getElementById('languageSelect').value = currentLang;
+    });
+  </script>
+  <script src="js/api.js"></script>
+  <script src="js/socket-service.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

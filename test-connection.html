@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RapidBlood - Backend Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .test-button {
+            background: #ff6b9d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #e55a8a;
+        }
+        .result {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { border-left: 4px solid #28a745; }
+        .error { border-left: 4px solid #dc3545; }
+        .info { border-left: 4px solid #17a2b8; }
+    </style>
+</head>
+<body>
+    <h1>🔗 RapidBlood Backend Connection Test</h1>
+    
+    <div class="test-section">
+        <h2>1. Backend Health Check</h2>
+        <button class="test-button" onclick="testHealth()">Test Health Endpoint</button>
+        <div id="healthResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. User Registration Test</h2>
+        <button class="test-button" onclick="testDonorRegistration()">Test Donor Registration</button>
+        <button class="test-button" onclick="testRecipientRegistration()">Test Recipient Registration</button>
+        <div id="registrationResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. User Login Test</h2>
+        <button class="test-button" onclick="testLogin()">Test Login</button>
+        <div id="loginResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. API Authentication Test</h2>
+        <button class="test-button" onclick="testAuth()">Test Protected Endpoints</button>
+        <div id="authResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Socket.IO Connection Test</h2>
+        <button class="test-button" onclick="testSocket()">Test Socket.IO</button>
+        <div id="socketResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>6. Full Integration Test</h2>
+        <button class="test-button" onclick="runFullTest()">Run Complete Test</button>
+        <div id="fullTestResult" class="result"></div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/socket-service.js"></script>
+    <script>
+        let testUser = null;
+        let testToken = null;
+
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `result ${type}`;
+        }
+
+        async function testHealth() {
+            try {
+                const response = await fetch('http://localhost:5000/health');
+                const data = await response.json();
+                showResult('healthResult', `✅ Health Check Success:\n${JSON.stringify(data, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('healthResult', `❌ Health Check Failed:\n${error.message}`, 'error');
+            }
+        }
+
+        async function testDonorRegistration() {
+            try {
+                const testData = {
+                    name: 'Test Donor',
+                    email: `testdonor${Date.now()}@example.com`,
+                    phone: '1234567890',
+                    password: 'password123',
+                    bloodType: 'O+',
+                    address: 'Test City',
+                    longitude: 90.3563,
+                    latitude: 23.8103
+                };
+
+                const response = await api.registerDonor(testData);
+                testUser = testData;
+                testToken = response.token;
+                
+                showResult('registrationResult', `✅ Donor Registration Success:\n${JSON.stringify(response, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('registrationResult', `❌ Donor Registration Failed:\n${error.message}`, 'error');
+            }
+        }
+
+        async function testRecipientRegistration() {
+            try {
+                const testData = {
+                    name: 'Test Recipient',
+                    email: `testrecipient${Date.now()}@example.com`,
+                    phone: '0987654321',
+                    password: 'password123',
+                    bloodType: 'A+',
+                    address: 'Test City',
+                    longitude: 90.3563,
+                    latitude: 23.8103
+                };
+
+                const response = await api.registerRecipient(testData);
+                testUser = testData;
+                testToken = response.token;
+                
+                showResult('registrationResult', `✅ Recipient Registration Success:\n${JSON.stringify(response, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('registrationResult', `❌ Recipient Registration Failed:\n${error.message}`, 'error');
+            }
+        }
+
+        async function testLogin() {
+            if (!testUser) {
+                showResult('loginResult', '❌ Please register a user first', 'error');
+                return;
+            }
+
+            try {
+                const response = await api.login(testUser.email, testUser.password);
+                showResult('loginResult', `✅ Login Success:\n${JSON.stringify(response, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('loginResult', `❌ Login Failed:\n${error.message}`, 'error');
+            }
+        }
+
+        async function testAuth() {
+            if (!api.isAuthenticated()) {
+                showResult('authResult', '❌ Please login first', 'error');
+                return;
+            }
+
+            try {
+                const [donors, recipients] = await Promise.all([
+                    api.getDonors(),
+                    api.getRecipients()
+                ]);
+
+                showResult('authResult', `✅ Authentication Test Success:\nDonors: ${donors.length}\nRecipients: ${recipients.length}`, 'success');
+            } catch (error) {
+                showResult('authResult', `❌ Authentication Test Failed:\n${error.message}`, 'error');
+            }
+        }
+
+        function testSocket() {
+            try {
+                if (!testUser || !testUser.email) {
+                    showResult('socketResult', '❌ Please register a user first', 'error');
+                    return;
+                }
+
+                // Test Socket.IO connection
+                socketService.connect('test-user-id');
+                
+                socketService.on('connected', () => {
+                    showResult('socketResult', '✅ Socket.IO Connection Success:\nConnected to backend', 'success');
+                });
+
+                setTimeout(() => {
+                    if (socketService.getConnectionStatus().isConnected) {
+                        showResult('socketResult', '✅ Socket.IO Connection Success:\nConnected to backend', 'success');
+                    } else {
+                        showResult('socketResult', '❌ Socket.IO Connection Failed:\nConnection timeout', 'error');
+                    }
+                }, 3000);
+
+            } catch (error) {
+                showResult('socketResult', `❌ Socket.IO Test Failed:\n${error.message}`, 'error');
+            }
+        }
+
+        async function runFullTest() {
+            showResult('fullTestResult', '🔄 Running full integration test...', 'info');
+            
+            try {
+                // 1. Health check
+                await testHealth();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // 2. Registration
+                await testDonorRegistration();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // 3. Login
+                await testLogin();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // 4. Auth
+                await testAuth();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // 5. Socket
+                testSocket();
+
+                showResult('fullTestResult', '✅ Full Integration Test Complete!\nAll tests passed successfully.', 'success');
+            } catch (error) {
+                showResult('fullTestResult', `❌ Full Integration Test Failed:\n${error.message}`, 'error');
+            }
+        }
+
+        // Auto-run health check on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            testHealth();
+        });
+    </script>
+</body>
+</html>
